@@ -1,0 +1,3 @@
+const DriverHeadshot = ({wiki, size}) => {
+
+}

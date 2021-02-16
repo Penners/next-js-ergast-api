@@ -4,13 +4,12 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-
+    min-height: 100vh;
 }
 
 #__next {
-    max-width: 100%;
-    overflow: hidden;
-    margin-top: 55px;
+
+    padding-top: 55px;
 }
 
 a {
@@ -20,4 +19,17 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+#nprogress .bar {
+background: white;
+}
+
+#nprogress .peg {
+box-shadow: 0 0 10px white, 0 0 5px white;
+}
+
+#nprogress .spinner-icon {
+border-top-color: white;
+border-left-color: white;
 }

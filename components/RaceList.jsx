@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import Head from 'next/head'
 import getShortHandDate from 'lib/getShortHandDate'
 import getSeasonList from 'lib/getSeasonList'
 import { useRouter } from 'next/router'
-
+import Race from 'components/Race'
 
 const RaceList = ({ raceList, season }) => {
 
@@ -16,95 +17,75 @@ const RaceList = ({ raceList, season }) => {
         router.push(newSeason)
     }
 
-    console.log(raceList)
- 
+
     return(
         <>
-        {router.isFallback ? 'Loading....' : 'Loaded'}
-        <h1>{season} Calander</h1>
-        <select onChange={handleYearChange} defaultValue={season}>
-            {years.map((year) => {
-                return(
-                    <option value={year} key={year}>{year}</option>
-                )
-            })}
-        </select>
+        <Head>
+            <title>Formula 1 {season} Schedule</title>
+        </Head>
+        <div className="header">
+            <h1 className="title">
+                Formula 1 {` `} 
+            <select className="select" onChange={handleYearChange} defaultValue={`/schedule/${season}`}>
+                {years.map((year) => {
+                    return(
+                        <option key={`season-${year}`} className="option" value={`/schedule/${year}`}>{year}</option>
+                    )
+                })}
+                
+            </select>
+            {` `} Schedule
+            </h1>
+        </div>
+        
         <div className="race-list">
-            {raceList.map(({raceName, round, date, time = null, season, Circuit: {url, circuitName, Location: { isoAlpha2, country }}})=> {
-                const cc = isoAlpha2.toLowerCase()
-                const datetime = new Date(Date.parse((date && time) ? `${date} ${time}` : date))
-                return (
-                    <Link key={raceName} href={`/race/${season}/${round}`}>
-                        <a className="race">
-                            <div className="round">
-                                {`R${round}`}
-                            </div>
-                            <img className="flag" src={`https://flagcdn.com/w160/${cc}.png`} />
-                            <img className="circuit" src={`/api/image?wiki=${url}`} />
-                            <div className="meta">
-                                <time className="date" dateTime={datetime}>{getShortHandDate(datetime)}</time>
-                                <h2 className="name">{raceName}</h2>
-                                <h3 className="circuit">{circuitName}</h3>
-                            </div>
-                        </a>
-                    </Link>
-                )
+        
+            {raceList.map((race, index)=> {
+                return <Race key={`racelist-${index}`} {...race}/>                
             })}
         </div>
         <style jsx>{`
-            .race-list {
-                max-width: 600px;
-                margin: auto;
-            }
-            .race {
-                display: flex;
-                align-items: center; 
-                background-color: white; 
-                border: 1px solid black;
-                margin: 10px;
-                border-radius: 5px;
-                overflow: hidden;
-            }  
 
-            .round {
-                background-color: red;
-                color: white;
+            .header {
                 display: flex;
-                align-self: stretch;
-                justify-content: center;
-                align-items: center;
-                min-width: 50px;
+                justify-content: space-between;
+                align-items: baseline;
+                margin: 10px;
+            }
+
+            .title {
+                margin: 0;
+                font-weight: 400;
                 font-size: 20px;
             }
 
-            .flag {
-                border: 1px solid black;
-                object-fit: cover;
-                object-position: center center;
-
-                height: 50px;
-                width: 50px;
-                margin: 10px;
-                border-radius: 50%;
-
+            .select {
+                border: 0;
+                font-size: inherit;
+            }
+            .select:hover {
+                cursor: pointer; 
+            }
+            .select:focus {
+                border: red;
             }
 
-            .meta {
-                margin: 10px;
+            .option {
+                font-size: initial;
             }
 
-            .date {
-                margin: 0;
-                font-size: 12px;
+            .race-list {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                ".";
+                margin-bottom: 20px;
             }
-
-            .name {
-                margin: 0;
-                font-size: 16px;
-            }
-            .circuit {
-                margin: 0; 
-                font-size: 14px;
+            @media(min-width: 768px){
+                .race-list {
+                    grid-template-columns: 1fr 1fr;
+                    grid-template-areas: ". .";
+                }
             }
         `}</style>
         </>
