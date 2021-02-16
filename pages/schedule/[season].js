@@ -1,27 +1,17 @@
-import getCountryCode from 'lib/getCountryCode'
-import getSeasonList from 'lib/getSeasonList'
-import { useRouter } from 'next/router'
+import Main from 'components/Main'
 import RaceList from 'components/RaceList'
 import getRacesForSeaon from 'lib/data/getRacesForSeason'
 
 
 const Schedule = (props) => {
-
-    const router = useRouter()
-
-    if (router.isFallback){
-        return (
-            <h1>Loading</h1>
-        )
-    }
    
     const { races = [], season } = props
-
-
-
     return (
     <>
-        <RaceList raceList={races} {...{season}}/>
+        <Main>
+            <RaceList raceList={races} {...{season}}/>
+        </Main>
+        
     </>
   )
 }
@@ -41,7 +31,7 @@ export async function getStaticProps({ params }){
 export async function getStaticPaths(){
     return {
         paths: [
-            '/2020'
+            '/schedule/2020'
         ],
         fallback: true
     }
