@@ -11,6 +11,7 @@ const Card = ({children, margin = 10}) => {
                 margin: ${margin}px;
                 border-radius: 10px;
                 overflow: hidden;
+                background-color: white;
             }    
         `}</style>
         </>

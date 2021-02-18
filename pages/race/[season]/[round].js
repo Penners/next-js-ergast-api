@@ -3,23 +3,23 @@ import getCountryCode from 'lib/getCountryCode'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
-const Race = ({results = {}, info = {} }) => {
+const Race = ({ results = {}, info = {} }) => {
 
     const { isFallback } = useRouter()
 
     const TopDrivers = ({ results = [] }) => {
 
-        return(
-            <> 
-            <div className="podium">
-                {results?.data.MRData.RaceTable.Races[0].Results.slice(0, 3).map((driver) => {
-                    const { Driver: { givenName, familyName, url } } = driver
-                    return (
-                        <DriverHeadshot className="headshot" url={url} name={familyName} size={250} />    
-                    )
-                })}
-            </div>
-            <style jsx>{`
+        return (
+            <>
+                <div className="podium">
+                    {results?.data.MRData.RaceTable.Races[0].Results.slice(0, 3).map((driver) => {
+                        const { Driver: { givenName, familyName, url } } = driver
+                        return (
+                            <DriverHeadshot className="headshot" url={url} name={familyName} size={250} />
+                        )
+                    })}
+                </div>
+                <style jsx>{`
                 .podium {
                     display: flex;
                 }
@@ -96,7 +96,7 @@ const Race = ({results = {}, info = {} }) => {
 
     return (
         <>
-            {!isFallback && results.data && 
+            {!isFallback && results.data &&
                 <div>
                     {/* <TopDrivers results={results} /> */}
                     <span>Test</span>
@@ -151,15 +151,13 @@ export async function getStaticProps({ params }) {
 
     const results = await fetchAll(requests)
 
-    console.log(results)
-
     results.info.data?.MRData?.RaceTable?.Races.map((race) => {
         race.Circuit.Location.iso2Alpha = getCountryCode(race.Circuit.Location)
         return race
     })
 
     return ({
-        props: {...results, success: true},
+        props: { ...results, success: true },
         revalidate: 60 * 60 * 24
     })
 }
