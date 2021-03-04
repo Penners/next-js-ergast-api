@@ -3,18 +3,13 @@ import getNextRace from 'lib/getNextRace'
 import getPreviousRace from 'lib/getPreviousRace'
 import getDriverStandings from 'lib/getDriverStandings'
 import getConstructorStandings from 'lib/getConstructorStandings'
-
-import Link from 'next/link'
-
-import Card from 'components/Card'
 import RaceCountdown from 'components/RaceCountdown'
-import ResultsTableShort from 'components/ResultsTableShort'
+import ResultsTable from 'components/ResultsTable'
 
 const Index = (props) => {
 
     const {
         nextRace,
-        previousRace,
         driverStandings: {
             DriverStandings,
             season: driverSeason
@@ -39,9 +34,9 @@ const Index = (props) => {
             points: 'Pts'
 
         },
-        values: DriverStandings.slice(0, 5).map(({ positionText, points, wins, Driver: { givenName, familyName } }) => {
+        values: DriverStandings.slice(0, 5).map(({ positionText: position, points, wins, Driver: { givenName, familyName } }) => {
             return {
-                position: positionText,
+                position,
                 points,
                 wins,
                 name: `${givenName[0]}. ${familyName}`
@@ -52,8 +47,8 @@ const Index = (props) => {
     const constructorStandingsProps = {
         title: `${driverSeason} Constructor Standings`,
         link: {
-            href: `/standings/${driverSeason}`,
-            label: `View full ${driverSeason} Standings`
+            href: `/standings/${constructorSeason}`,
+            label: `View full ${constructorSeason} Standings`
         },
         header: {
             position: 'Pos',
@@ -62,9 +57,9 @@ const Index = (props) => {
             points: 'Pts'
 
         },
-        values: ConstructorStandings.slice(0, 5).map(({ positionText, points, wins, Constructor: { name } }) => {
+        values: ConstructorStandings.slice(0, 5).map(({ positionText: position, points, wins, Constructor: { name } }) => {
             return {
-                position: positionText,
+                position,
                 points,
                 wins,
                 name
@@ -81,11 +76,9 @@ const Index = (props) => {
         <>
             <Main>
                 <RaceCountdown {...nextRace} />
-
-
                 <div className="container">
-                    <ResultsTableShort {...driverStandingsProps} />
-                    <ResultsTableShort {...constructorStandingsProps} />
+                    <ResultsTable {...driverStandingsProps} />
+                    <ResultsTable {...constructorStandingsProps} />
                 </div>
 
                 <style jsx>{`
@@ -107,14 +100,12 @@ const Index = (props) => {
                     }                              
                 `}
                 </style>
-
             </Main>
-
         </>
     )
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps() {
 
 
     const data = await Promise.all([
@@ -126,7 +117,7 @@ export async function getServerSideProps(context) {
 
     const [nextRace, previousRace, driverStandings, constructorStandings] = data
 
-    return { props: { nextRace, previousRace, driverStandings, constructorStandings } }
+    return { props: { nextRace, previousRace, driverStandings, constructorStandings }, revalidate: 60 }
 }
 
 

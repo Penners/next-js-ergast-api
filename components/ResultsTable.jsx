@@ -1,12 +1,14 @@
 import Card from 'components/Card'
 import Link from 'next/link'
 
-const ResultsTableShort = ({ title, link, header, values }) => {
+const ResultsTable = ({ title, link, header, values }) => {
     return (
         <>
             <Card>
                 <div className="inner">
-                    <h3 className="title">{title}</h3>
+                    {title && 
+                        <h3 className="title">{title}</h3>
+                    }
                     <table>
                         <thead>
                             <tr>
@@ -29,7 +31,7 @@ const ResultsTableShort = ({ title, link, header, values }) => {
                             })}
                         </tbody>
                     </table>
-                    {link.label && link.href &&
+                    {link && link.label && link.href &&
                         <Link href={link.href}>
                             <a>{link.label}</a>
                         </Link>
@@ -73,36 +75,4 @@ const ResultsTableShort = ({ title, link, header, values }) => {
     )
 }
 
-
-const props = {
-    title: '2020 Driver Standings',
-    link: {
-        label: '2020 Driver Standings',
-        href: '/standings/2020'
-    },
-    header: {
-        position: 'pos.',
-        name: 'name',
-        points: 'Pts'
-
-    },
-    values: [
-        {
-            name: 'Lewis',
-            position: '1',
-            points: '230',
-        },
-        {
-            name: 'Vettell',
-            position: '2',
-            points: '230',
-        },
-        {
-            name: 'Lewis',
-            position: '1',
-            points: '230',
-        }
-    ]
-}
-
-export default ResultsTableShort
+export default ResultsTable

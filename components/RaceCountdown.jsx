@@ -73,7 +73,8 @@ const RaceCountdown = ({
                         </div>
                     </div>
                 <div className="container">
-                    <div className="headline">
+                    <Link href={`/race/${season}/${round}`}>
+                    <a className="headline">
                         <img className="flag" src={`https://flagcdn.com/w160/${iso2Alpha.toLowerCase()}.png`} />
                         <div className="info-container">
                             <p className="race-name">{raceName} {season}</p>
@@ -81,7 +82,8 @@ const RaceCountdown = ({
                             <time className="date" dateTime={raceDate}>{getShortHandDate(raceDate)} </time>
                         </div>
 
-                    </div>
+                    </a>
+                    </Link>
                     <Link href={`/schedule/${season}`}>
                         <a className="button">
                             View full {season} schedule
